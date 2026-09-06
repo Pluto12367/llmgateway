@@ -1,0 +1,58 @@
+# LLMGateway 示例配置。
+# 复制为 gateway.toml 后按需修改；真实 API Key 只通过环境变量引用，不入库。
+# 用 `llmgateway init` 可自动生成一份同名文件。
+
+[gateway]
+# 全局月度预算（美元）；当月累计成本超过后所有请求返回 429 budget_exceeded。
+monthly_budget_usd = 50.0
+# 请求日志/用量/缓存数据库存放目录（相对本配置文件，可改为绝对路径）。
+data_dir = "data"
+
+[gateway.cache]
+enabled = true
+# 语义缓存命中阈值（余弦相似度）。
+# fastembed 语义向量建议 0.9~0.98；内置 hash 嵌入建议 0.55~0.65（标定：同义改写 0.57~0.71，无关 ≤0.38）。
+threshold = 0.96
+# 缓存最多保留的条目数（超出删除最旧）。
+max_entries = 5000
+# 嵌入后端：auto(有 fastembed 则用本地 bge，否则回退内置 hash) / fastembed / hash / none(仅完全一致命中)
+embedder = "auto"
+
+[gateway.limits]
+# 每个虚拟 key 的默认每分钟请求数上限。
+default_rpm = 60
+
+# ---------- 上游厂商 ----------
+# 每个厂商必须能通过其 base_url + api_key 访问 OpenAI 兼容的 /chat/completions。
+# api_key_env: 从该环境变量读取厂商密钥（例如 export DEEPSEEK_API_KEY=sk-xxx）。
+# in_usd_per_1m / out_usd_per_1m: 每百万 token 价格（美元），用于成本核算与预算。
+
+[providers.deepseek]
+base_url = "https://api.deepseek.com/v1"
+api_key_env = "DEEPSEEK_API_KEY"
+in_usd_per_1m = 0.27
+out_usd_per_1m = 1.10
+
+[providers.glm]
+base_url = "https://open.bigmodel.cn/api/paas/v4"
+api_key_env = "ZHIPU_API_KEY"
+in_usd_per_1m = 0.14
+out_usd_per_1m = 0.14
+# 该厂商可直接承接 /v1/embeddings 的模型名（网关据此把嵌入请求透传到对应厂商）
+# embed_models = ["embedding-2"]
+
+# ---------- 模型别名 ----------
+# 客户端只认别名；网关按 candidates 顺序尝试，前面的失败(网络/5xx/429/401 等)自动降级到下一个。
+# 顺序即优先级（通常把更便宜/更稳的放前面）。
+
+[models.fast]
+candidates = [
+    { provider = "deepseek", model = "deepseek-chat" },
+    { provider = "glm",      model = "glm-4-flash" },
+]
+
+[models.reason]
+candidates = [
+    { provider = "deepseek", model = "deepseek-reasoner" },
+    { provider = "glm",      model = "glm-4.5" },
+]

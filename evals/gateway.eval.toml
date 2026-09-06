@@ -1,0 +1,34 @@
+# 语义缓存回放评测专用配置（离线：上游请求由 MockTransport stub 承接，不会真实外呼）。
+# 运行：llmgateway eval --config evals/gateway.eval.toml evals/recordings.json
+# 价格表按 DeepSeek / GLM 2026-08 公开牌价，供成本节省换算。
+
+[gateway]
+monthly_budget_usd = 100.0
+data_dir = "data"
+
+[gateway.cache]
+enabled = true
+threshold = 0.60
+max_entries = 5000
+embedder = "hash"
+
+[gateway.limits]
+default_rpm = 600
+
+[providers.a]
+base_url = "https://api.deepseek.com/v1"
+api_key_env = "EVAL_PROVIDER_A_KEY"
+in_usd_per_1m = 0.27
+out_usd_per_1m = 1.10
+
+[providers.b]
+base_url = "https://open.bigmodel.cn/api/paas/v4"
+api_key_env = "EVAL_PROVIDER_B_KEY"
+in_usd_per_1m = 0.14
+out_usd_per_1m = 0.14
+
+[models.fast]
+candidates = [
+    { provider = "a", model = "deepseek-chat" },
+    { provider = "b", model = "glm-4-flash" },
+]

@@ -1,0 +1,27 @@
+{
+  "embedder": "hash",
+  "threshold": 0.6,
+  "cases": [
+    { "group": "g1", "expect": "miss",   "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "用一句话总结这段代码的异常处理模式。" } ] },
+    { "group": "g1", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "请用一句话说明这段代码是如何处理异常的。" } ] },
+    { "group": "g1", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "用一句话总结这段代码的异常处理模式。" } ] },
+
+    { "group": "g2", "expect": "miss",   "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "解释一下什么是依赖倒置原则。" } ] },
+    { "group": "g2", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "简要介绍一下依赖倒置原则是什么。" } ] },
+    { "group": "g2", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "解释一下什么是依赖倒置原则。" } ] },
+
+    { "group": "g3", "expect": "miss",   "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "写一首关于秋天的五言绝句。" } ] },
+    { "group": "g3", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "写一首描写秋天景色的五言绝句。" } ] },
+    { "group": "g3", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "写一首关于秋天的五言绝句。" } ] },
+
+    { "group": "g4", "expect": "miss",   "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "如何用Python读取CSV文件？" } ] },
+    { "group": "g4", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "Python里读取CSV文件的方法是什么？" } ] },
+    { "group": "g4", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "如何用Python读取CSV文件？" } ] },
+
+    { "group": "g5", "expect": "miss",   "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "帮我写一个快速排序的实现。" } ] },
+    { "group": "g5", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "写一个实现快速排序的代码。" } ] },
+    { "group": "g5", "expect": "hit",    "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "帮我写一个快速排序的实现。" } ] },
+
+    { "group": "s1", "expect": "miss",   "messages": [ { "role": "system", "content": "你是简洁的助手。" }, { "role": "user", "content": "把这句话翻译成英文：网关是系统的唯一入口。" } ] }
+  ]
+}
