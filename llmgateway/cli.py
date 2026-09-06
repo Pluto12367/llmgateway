@@ -21,7 +21,20 @@ from . import __version__
 console = Console(legacy_windows=False)
 
 
+def _ensure_utf8_stdout() -> None:
+    """管道/重定向下 Windows 默认用 locale 编码（如 cp1252），打印 Unicode 符号
+    会抛 UnicodeEncodeError；统一重配为 UTF-8（与 CI 日志/现代终端一致）。"""
+    enc = getattr(sys.stdout, "encoding", "") or ""
+    if enc.lower() not in ("utf-8", "utf8"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, OSError):
+            pass
+
+
 def main(argv: list[str] | None = None) -> int:
+    _ensure_utf8_stdout()
     parser = argparse.ArgumentParser(
         prog="llmgateway",
         description="LLMGateway — 自托管 OpenAI 兼容 LLM 网关",
