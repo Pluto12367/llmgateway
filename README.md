@@ -113,6 +113,17 @@ llmgateway eval --config evals/gateway.eval.toml evals/recordings.json
 
 评测为纯离线回放（上游由 MockTransport stub 承接，不发生真实外呼），输出命中率、预期标注准确率、上游调用次数与成本节省。录制集格式见 `evals/recordings.json`：每条含 `messages` 与可选 `expect`（hit/miss）标注，换自己的业务问题集即可得到自己的数字。
 
+## 测试
+
+58 项单元测试，全程离线（上游由 stub 承接，不需要任何真实 API Key）：
+
+```bash
+pip install -e '.[dev]'
+pytest -q
+```
+
+CI（`.github/workflows/ci.yml`）在 Ubuntu 与 Windows 上对 Python 3.11 / 3.12 / 3.13 运行同一套测试，并额外执行离线演示冒烟（`llmgateway demo`）。
+
 ## 配置参考
 
 完整注释示例见 [gateway.example.toml](gateway.example.toml)。核心结构：
